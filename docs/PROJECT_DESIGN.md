@@ -246,6 +246,8 @@ def answer(conversation_id: str, question: str) -> Answer:
 
 验收：导入 PDF 后能看到标题、类型、行业、作者、页码和解析状态。
 
+当前实现顺序已经具体化为：API 接收上传 → `DocumentService.import_document()` 创建并推进状态 → `LocalFileStore` 保存文件 → `ParserRegistry` 解析文本 → `FixedSizeChunker` 生成分块 → `SQLiteDocumentRepository` 保存分块。这样每个环节都有单独替换和测试的可能。
+
 ### Level 2：全文检索
 
 - SQLite FTS5；

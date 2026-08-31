@@ -26,6 +26,16 @@ CREATE TABLE IF NOT EXISTS documents (
     updated_at TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS document_chunks (
+    id TEXT PRIMARY KEY,
+    document_id TEXT NOT NULL,
+    sequence INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    location TEXT,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY(document_id) REFERENCES documents(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS app_meta (
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL

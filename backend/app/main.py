@@ -3,8 +3,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.api.router import router
+from app.api.documents import router as documents_router
+from app.adapters.file_store import LocalFileStore
+from app.adapters.parsers import ParserRegistry
+from app.adapters.sqlite_repository import SQLiteDocumentRepository
 from app.config import settings
 from app.db import initialize_database
+from app.services.document_service import DocumentService, FixedSizeChunker
 
 
 @asynccontextmanager
@@ -16,12 +21,20 @@ async def lifespan(_: FastAPI):
     """
     settings.ensure_directories()
     initialize_database(settings.database_path)
+    # 组合根集中组装依赖；API 不需要知道 SQLite 和本地文件的实现细节。
+    settings.document_service = DocumentService(
+        SQLiteDocumentRepository(settings.database_path),
+        LocalFileStore(settings.storage_dir),
+        ParserRegistry(),
+        FixedSizeChunker(),
+    )
     yield
 
 
 # FastAPI 负责传输层；业务服务将在后续等级中从 app/api 路由中调用。
 app = FastAPI(title=settings.app_name, version="0.1.0", lifespan=lifespan)
 app.include_router(router, prefix="/api")
+app.include_router(documents_router, prefix="/api")
 
 
 if __name__ == "__main__":
