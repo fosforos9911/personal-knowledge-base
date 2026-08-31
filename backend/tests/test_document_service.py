@@ -6,6 +6,7 @@ from app.adapters.sqlite_repository import SQLiteDocumentRepository
 from app.db import connect, initialize_database
 from app.domain.models import Document
 from app.services.document_service import DocumentService, FixedSizeChunker
+from app.services.search_service import SearchFilters, SearchService
 
 
 def test_import_text_document(tmp_path: Path) -> None:
@@ -27,3 +28,8 @@ def test_import_text_document(tmp_path: Path) -> None:
     assert document["status"] == "ready"
     assert chunks["count"] >= 2
     assert (tmp_path / "storage" / "documents" / result.id / "whitepaper.md").exists()
+
+    search = SearchService(SQLiteDocumentRepository(database))
+    results = search.search("数据采集", SearchFilters(industry="制造"))
+    assert len(results) == 1
+    assert results[0]["document_id"] == result.id

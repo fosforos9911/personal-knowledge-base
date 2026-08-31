@@ -36,6 +36,17 @@ CREATE TABLE IF NOT EXISTS document_chunks (
     FOREIGN KEY(document_id) REFERENCES documents(id) ON DELETE CASCADE
 );
 
+-- FTS5 保存检索副本，不保存原始文件；rowid 对应 document_chunks.id 的映射表。
+CREATE VIRTUAL TABLE IF NOT EXISTS chunk_fts USING fts5(
+    chunk_id UNINDEXED,
+    document_id UNINDEXED,
+    title,
+    content,
+    industry,
+    author,
+    keywords
+);
+
 CREATE TABLE IF NOT EXISTS app_meta (
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL

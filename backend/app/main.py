@@ -4,12 +4,14 @@ from fastapi import FastAPI
 
 from app.api.router import router
 from app.api.documents import router as documents_router
+from app.api.search import router as search_router
 from app.adapters.file_store import LocalFileStore
 from app.adapters.parsers import ParserRegistry
 from app.adapters.sqlite_repository import SQLiteDocumentRepository
 from app.config import settings
 from app.db import initialize_database
 from app.services.document_service import DocumentService, FixedSizeChunker
+from app.services.search_service import SearchService
 
 
 @asynccontextmanager
@@ -28,6 +30,7 @@ async def lifespan(_: FastAPI):
         ParserRegistry(),
         FixedSizeChunker(),
     )
+    settings.search_service = SearchService(SQLiteDocumentRepository(settings.database_path))
     yield
 
 
@@ -35,6 +38,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title=settings.app_name, version="0.1.0", lifespan=lifespan)
 app.include_router(router, prefix="/api")
 app.include_router(documents_router, prefix="/api")
+app.include_router(search_router, prefix="/api")
 
 
 if __name__ == "__main__":
