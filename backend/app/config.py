@@ -21,6 +21,7 @@ class Settings:
     # 启动时注入的应用服务；它不是持久化配置，只是依赖组装结果。
     document_service: object | None = None
     search_service: object | None = None
+    chat_service: object | None = None
 
     @classmethod
     def from_env(cls) -> "Settings":

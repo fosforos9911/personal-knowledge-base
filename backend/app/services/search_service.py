@@ -19,10 +19,23 @@ class SearchService:
 
     def search(self, query: str, filters: SearchFilters | None = None) -> list[dict]:
         """先用 FTS5 找候选，再按文档元数据过滤并附上定位信息。"""
-        if not query.strip():
+        normalized = self._normalize_query(query)
+        if not normalized:
             return []
-        candidates = self.repository.search_chunks(query.strip())
+        candidates = self.repository.search_chunks(normalized)
         return self._apply_filters(candidates, filters or SearchFilters())
+
+    @staticmethod
+    def _normalize_query(query: str) -> str:
+        """去掉常见提问尾词，让全文检索先抓住工程主题。
+
+        这里只做轻量清洗，不宣称已经具备语义理解；真正的意图识别和
+        向量召回会在后续阶段加入。
+        """
+        normalized = query.strip().rstrip("？?").strip()
+        for suffix in ("怎么做", "如何做", "是什么", "有哪些", "吗", "呢", "？", "?"):
+            normalized = normalized.removesuffix(suffix).strip()
+        return normalized
 
     @staticmethod
     def _apply_filters(results: list[dict], filters: SearchFilters) -> list[dict]:
