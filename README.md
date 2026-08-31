@@ -12,3 +12,4 @@
 - 不规划企业化部署、多用户、交流社区、联网搜索或 GitHub 集成。
 
 详细设计见 [`docs/PROJECT_DESIGN.md`](docs/PROJECT_DESIGN.md)，设计取舍记录见 [`docs/DESIGN_DECISIONS.md`](docs/DESIGN_DECISIONS.md)。
+Level 0 的文件拆分和函数决策见 [`docs/LEVEL0_GUIDE.md`](docs/LEVEL0_GUIDE.md)。
