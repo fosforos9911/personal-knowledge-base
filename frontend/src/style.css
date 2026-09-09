@@ -1,0 +1,19 @@
+:root { font-family: Inter, system-ui, sans-serif; color: #17202a; background: #f5f7fa; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+.shell { min-height: 100vh; display: flex; }
+.sidebar { width: 240px; padding: 28px 18px; background: #132238; color: #eaf1fb; }
+.brand { font-size: 22px; font-weight: 700; margin-bottom: 42px; }
+.brand span { display: block; margin-top: 6px; font-size: 12px; font-weight: 400; color: #a8b8cc; }
+nav { display: grid; gap: 8px; }
+nav a { padding: 11px 13px; border-radius: 8px; color: #c9d5e3; text-decoration: none; }
+nav a:hover { background: #203653; color: white; }
+.content { max-width: 980px; padding: 76px 7vw; }
+.eyebrow { color: #557da8; letter-spacing: .12em; font-size: 12px; font-weight: 700; }
+h1 { max-width: 650px; margin: 18px 0; font-size: 46px; line-height: 1.12; }
+.intro { max-width: 620px; color: #617083; font-size: 18px; line-height: 1.7; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 52px; }
+article { min-height: 130px; padding: 22px; border: 1px solid #e0e6ed; border-radius: 12px; background: white; }
+article strong, article span { display: block; }
+article strong { margin-bottom: 14px; }
+article span { color: #718096; font-size: 14px; line-height: 1.5; }
