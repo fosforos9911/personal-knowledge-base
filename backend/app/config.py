@@ -3,7 +3,7 @@ from pathlib import Path
 import os
 
 
-@dataclass(frozen=True)
+@dataclass
 class Settings:
     """应用运行所需的最小配置。
 
@@ -18,6 +18,8 @@ class Settings:
     data_dir: Path = Path("data")
     storage_dir: Path = Path("storage")
     database_path: Path = Path("data/knowledge_base.sqlite3")
+    # 启动时注入的应用服务；它不是持久化配置，只是依赖组装结果。
+    document_service: object | None = None
 
     @classmethod
     def from_env(cls) -> "Settings":
